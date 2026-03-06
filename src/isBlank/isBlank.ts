@@ -1,0 +1,36 @@
+import { IsBlankOptions } from './types';
+
+const REGEX_FULL_WHITESPACE = /　/g;
+const REGEX_BOTH_WHITESPACE = /[ 　]/g;
+const REGEX_ALL_WHITESPACE = /\s/g;
+
+export default function isBlank(
+  value: unknown,
+  options: IsBlankOptions = {},
+): boolean {
+  if (value == null) {
+    return true;
+  }
+  if (typeof value === 'string') {
+    const { trimType = 'none' } = options;
+    let processed = value;
+    switch (trimType) {
+      case 'none':
+        break;
+      case 'half':
+        processed = processed.trim();
+        break;
+      case 'full':
+        processed = processed.replace(REGEX_FULL_WHITESPACE, '');
+        break;
+      case 'both':
+        processed = processed.replace(REGEX_BOTH_WHITESPACE, '');
+        break;
+      case 'all':
+        processed = processed.replace(REGEX_ALL_WHITESPACE, '');
+        break;
+    }
+    return processed === '';
+  }
+  return false;
+}
