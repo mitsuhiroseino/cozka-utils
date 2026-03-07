@@ -1,7 +1,6 @@
-import { DataFirst } from '../types';
 import { EnsureArrayOptions } from './types';
 
-const ensureArray: DataFirst<typeof _ensureArray> = <T>(
+const ensureArray = <T>(
   data: T | T[] | null | undefined,
   options?: EnsureArrayOptions,
 ): T[] => {
@@ -10,9 +9,8 @@ const ensureArray: DataFirst<typeof _ensureArray> = <T>(
 export default ensureArray;
 
 ensureArray.dataLast = (options: EnsureArrayOptions = {}) => {
-  const callback = <T>(data: T | T[] | null | undefined): T[] =>
+  return <T>(data: T | T[] | null | undefined): T[] =>
     _ensureArray(data, options);
-  return callback;
 };
 
 function _ensureArray<T>(
