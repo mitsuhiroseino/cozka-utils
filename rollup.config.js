@@ -44,6 +44,16 @@ const options = [
               require: `./${OUTPUT_CJS_DIR}/*/index.cjs`,
               types: './*/index.d.js',
             },
+            './constants': {
+              types: './constants.d.ts',
+              import: './constants.js',
+              require: `./cjs/constants.cjs`,
+            },
+            './*/constants': {
+              types: './*/constants.d.ts',
+              import: './*/constants.js',
+              require: `./cjs/*/constants.cjs`,
+            },
           },
         },
       }),

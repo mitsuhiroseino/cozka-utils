@@ -1,2 +1,2 @@
-export { default } from './_nestedBy';
+export { default } from './nestedBy';
 export type * from './types';
