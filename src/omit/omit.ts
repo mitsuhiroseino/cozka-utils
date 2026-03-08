@@ -1,17 +1,17 @@
 import * as R from 'remeda';
 import _parsePath from '../_internal/_parsePath';
 
-const get = <T, R = unknown>(
+const omit = <T, R = unknown>(
   data: T,
   path: PropertyKey | PropertyKey[],
-): R | undefined => _get(data, path);
-get.dataLast =
+): R | undefined => _omit(data, path);
+omit.dataLast =
   <T, R = unknown>(path: PropertyKey | PropertyKey[]) =>
   (data: T): R | undefined =>
-    _get(data, path);
-export default get;
+    _omit(data, path);
+export default omit;
 
-function _get<T, R = unknown>(
+function _omit<T, R = unknown>(
   data: T,
   path: PropertyKey | PropertyKey[],
 ): R | undefined {
@@ -20,5 +20,5 @@ function _get<T, R = unknown>(
   }
   const keys = _parsePath(path);
   // @ts-ignore
-  return R.prop(data, ...keys);
+  return R.omit(data, ...keys);
 }

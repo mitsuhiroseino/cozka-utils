@@ -6,9 +6,10 @@ import isEmpty from '../isEmptyValue';
  * @param size
  */
 const cycleArray = <T>(data: T[], size: number): T[] => _cycleArray(data, size);
-cycleArray.dataLast = (size: number) => {
-  return <T>(data: T[]): T[] => _cycleArray(data, size);
-};
+cycleArray.dataLast =
+  (size: number) =>
+  <T>(data: T[]): T[] =>
+    _cycleArray(data, size);
 export default cycleArray;
 
 function _cycleArray<T>(data: T[], size: number): T[] {

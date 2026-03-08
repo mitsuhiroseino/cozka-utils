@@ -6,6 +6,7 @@ import { NestedKeyByOptions, NestedKeyByResult } from './types';
 /**
  * 配列から指定のプロパティの値をキーとしたオブジェクトを作成する。
  *
+ * @example
  * array: [
  *   { prefecture: '01', city: '0101', name: 'foo' },
  *   { prefecture: '01', city: '0102', name: 'bar1' },
@@ -14,7 +15,7 @@ import { NestedKeyByOptions, NestedKeyByResult } from './types';
  * ]
  * properties: ['prefecture', 'city']
  *
- * ↓
+ * // ↓
  *
  * result: {
  *  '01': {
@@ -32,7 +33,21 @@ import { NestedKeyByOptions, NestedKeyByResult } from './types';
  * @param options オプション
  * @returns
  */
-export default function nestedKeyBy<I extends object>(
+const nestedKeyBy = <I extends object>(
+  data: I[],
+  properties: keyof I | (keyof I)[],
+  options: NestedKeyByOptions = {},
+) => _nestedKeyBy(data, properties, options);
+nestedKeyBy.dataLast =
+  <I extends object>(
+    properties: keyof I | (keyof I)[],
+    options: NestedKeyByOptions = {},
+  ) =>
+  (data: I[]) =>
+    _nestedKeyBy(data, properties, options);
+export default nestedKeyBy;
+
+function _nestedKeyBy<I extends object>(
   data: I[],
   properties: keyof I | (keyof I)[],
   options: NestedKeyByOptions = {},

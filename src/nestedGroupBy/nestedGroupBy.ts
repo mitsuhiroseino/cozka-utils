@@ -6,6 +6,7 @@ import { NestedGroupByOptions, NestedGroupByResult } from './types';
 /**
  * 配列から指定のプロパティの値をキーとしたオブジェクトを作成する。
  *
+ * @example
  * array: [
  *   { prefecture: '01', city: '0101', name: 'foo' },
  *   { prefecture: '01', city: '0102', name: 'bar1' },
@@ -14,7 +15,7 @@ import { NestedGroupByOptions, NestedGroupByResult } from './types';
  * ]
  * properties: ['prefecture', 'city']
  *
- * ↓
+ * // ↓
  *
  * result: {
  *  '01': {
@@ -39,7 +40,21 @@ import { NestedGroupByOptions, NestedGroupByResult } from './types';
  * @param options オプション
  * @returns
  */
-export default function nestedKeyBy<I extends object>(
+const nestedGroupBy = <I extends object>(
+  data: I[],
+  properties: keyof I | (keyof I)[],
+  options?: NestedGroupByOptions,
+) => _nestedGroupBy(data, properties, options);
+nestedGroupBy.dataLast =
+  <I extends object>(
+    properties: keyof I | (keyof I)[],
+    options?: NestedGroupByOptions,
+  ) =>
+  (data: I[]) =>
+    _nestedGroupBy(data, properties, options);
+export default nestedGroupBy;
+
+function _nestedGroupBy<I extends object>(
   data: I[],
   properties: keyof I | (keyof I)[],
   options: NestedGroupByOptions = {},

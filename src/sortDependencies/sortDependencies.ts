@@ -5,16 +5,24 @@ import { GetDepsFn, GetIdFn, SortDependenciesOptions } from './types';
 /**
  * 依存関係のソート
  * 依存関係かつ重複のあるノードのソートを行う
- * @param array 対象の配列
+ * @param data 対象の配列
  * @param options オプション
  * @returns 新しい配列
  */
-export default function sortDependencies<I>(
-  array: I[],
+const sortDependencies = <I>(data: I[], options?: SortDependenciesOptions<I>) =>
+  _sortDependencies(data, options);
+sortDependencies.dataLast =
+  <I>(options?: SortDependenciesOptions<I>) =>
+  (data: I[]) =>
+    _sortDependencies(data, options);
+export default sortDependencies;
+
+function _sortDependencies<I>(
+  data: I[],
   options: SortDependenciesOptions<I> = {},
 ): I[] {
-  if (!array) {
-    return array;
+  if (!data) {
+    return data;
   }
   const {
     idProp = 0,
@@ -35,7 +43,7 @@ export default function sortDependencies<I>(
     : (item: I) => item[depsIdProp];
   const itemsMap = getUniqItems(
     new Map<unknown, I>(),
-    array,
+    data,
     getId,
     getDeps,
     getDepId,

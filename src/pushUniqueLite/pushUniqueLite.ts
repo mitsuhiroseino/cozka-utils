@@ -4,13 +4,21 @@
  * @param array
  * @param items
  */
-export default function pushUniqueLite<T>(array: T[], items: T[]): T[] {
-  if (array) {
+const pushUniqueLite = <T>(data: T[], items: T[]) =>
+  _pushUniqueLite(data, items);
+pushUniqueLite.dataLast =
+  <T>(items: T[]) =>
+  (data: T[]) =>
+    _pushUniqueLite(data, items);
+export default pushUniqueLite;
+
+function _pushUniqueLite<T>(data: T[], items: T[]): T[] {
+  if (data) {
     for (const item of items) {
-      if (!array.includes(item)) {
-        array.push(item);
+      if (!data.includes(item)) {
+        data.push(item);
       }
     }
   }
-  return array;
+  return data;
 }

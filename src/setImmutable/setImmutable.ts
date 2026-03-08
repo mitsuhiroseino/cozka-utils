@@ -3,13 +3,24 @@ import _parsePath from '../_internal/_parsePath';
 
 /**
  * オブジェクトを更新して新しいオブジェクトを返します（非破壊的変更）。
- * @param obj 更新対象のオブジェクト
+ * @param data 更新対象のオブジェクト
  * @param path 更新するプロパティのパス（例: 'a.b.0' または ['a', 'b', 0]）
  * @param value 設定する値
  * @returns 更新された新しいオブジェクト
  */
-export default function setImmutable<T extends object>(
-  obj: T,
+const setImmutable = <T extends object>(
+  data: T,
+  path: string | PropertyKey[],
+  value: any,
+) => _setImmutable(data, path, value);
+setImmutable.dataLast =
+  <T extends object>(path: string | PropertyKey[], value: any) =>
+  (data: T) =>
+    _setImmutable(data, path, value);
+export default setImmutable;
+
+function _setImmutable<T extends object>(
+  data: T,
   path: string | PropertyKey[],
   value: any,
 ): T {
@@ -39,5 +50,5 @@ export default function setImmutable<T extends object>(
     }
   };
 
-  return setter(obj, 0);
+  return setter(data, 0);
 }
