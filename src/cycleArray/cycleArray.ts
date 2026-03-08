@@ -2,20 +2,26 @@ import isEmpty from '../isEmptyValue';
 
 /**
  * 指定のサイズになるまで、引数の配列を繰り返した新しい配列を返す。
- * @param array
+ * @param data
  * @param size
  */
-export default function cycleArray<T>(array: T[], size: number): T[] {
+const cycleArray = <T>(data: T[], size: number): T[] => _cycleArray(data, size);
+cycleArray.dataLast = (size: number) => {
+  return <T>(data: T[]): T[] => _cycleArray(data, size);
+};
+export default cycleArray;
+
+function _cycleArray<T>(data: T[], size: number): T[] {
   if (size === 0) {
     return [];
   }
 
   const result = new Array(Math.abs(size));
-  if (isEmpty(array)) {
+  if (isEmpty(data)) {
     return result;
   }
   // sizeが負の場合は逆順
-  const source = size < 0 ? [...array].reverse() : array;
+  const source = size < 0 ? [...data].reverse() : data;
   // 整数回繰り返す回数
   const cycles = Math.floor(result.length / source.length);
   // 残りの要素数

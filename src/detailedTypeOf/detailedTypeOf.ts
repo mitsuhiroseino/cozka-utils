@@ -5,37 +5,41 @@ import { ValueType } from './types';
  * typeofの結果を返す。\
  * typeof value === 'object' の場合は詳細な型を返す
  *
- * @param value 任意の値
+ * @param data 任意の値
  * @returns
  */
-export default function detailedTypeOf(value: unknown): ValueType {
-  const type = typeof value;
+const detailedTypeOf = (data: unknown): ValueType => _detailedTypeOf(data);
+detailedTypeOf.dataLast = () => detailedTypeOf;
+export default detailedTypeOf;
+
+function _detailedTypeOf(data: unknown): ValueType {
+  const type = typeof data;
   if (type === 'object') {
-    if (value === null) {
+    if (data === null) {
       return VALUE_TYPE.NULL;
-    } else if (Array.isArray(value)) {
+    } else if (Array.isArray(data)) {
       return VALUE_TYPE.ARRAY;
-    } else if (Object.getPrototypeOf(value) === Object.prototype) {
+    } else if (Object.getPrototypeOf(data) === Object.prototype) {
       return VALUE_TYPE.PLAIN_OBJECT;
-    } else if (value instanceof Date) {
+    } else if (data instanceof Date) {
       return VALUE_TYPE.DATE;
-    } else if (value instanceof RegExp) {
+    } else if (data instanceof RegExp) {
       return VALUE_TYPE.REGEXP;
-    } else if (value instanceof Error) {
+    } else if (data instanceof Error) {
       return VALUE_TYPE.ERROR;
-    } else if (value instanceof Map) {
+    } else if (data instanceof Map) {
       return VALUE_TYPE.MAP;
-    } else if (value instanceof Set) {
+    } else if (data instanceof Set) {
       return VALUE_TYPE.SET;
-    } else if (value instanceof WeakMap) {
+    } else if (data instanceof WeakMap) {
       return VALUE_TYPE.WEAK_MAP;
-    } else if (value instanceof WeakSet) {
+    } else if (data instanceof WeakSet) {
       return VALUE_TYPE.WEAK_SET;
-    } else if (value instanceof Promise) {
+    } else if (data instanceof Promise) {
       return VALUE_TYPE.PROMISE;
-    } else if (value instanceof ArrayBuffer) {
+    } else if (data instanceof ArrayBuffer) {
       return VALUE_TYPE.ARRAY_BUFFER;
-    } else if (value instanceof SharedArrayBuffer) {
+    } else if (data instanceof SharedArrayBuffer) {
       return VALUE_TYPE.SHARED_ARRAY_BUFFER;
     }
     return VALUE_TYPE.OBJECT;

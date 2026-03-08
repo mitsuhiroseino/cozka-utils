@@ -1,66 +1,56 @@
 /**
  * Data-FirstとData-Lastに対応した関数の定義
  */
-export interface DataFirst<IMPL extends (...args: any[]) => any> {
+export interface DataFirst<DATA, REST extends any[], RETURN> {
   /**
    * 元の関数をそのまま呼び出すためのプロパティ(Data-First)
    */
-  (...args: Parameters<IMPL>): ReturnType<IMPL>;
+  (data: DATA, ...args: REST): RETURN;
 
   /**
    * data以外を先に渡した関数を取得する為のプロパティ(Data-Last)
    */
-  dataLast: DataLast<IMPL>;
+  dataLast: DataLast<DATA, REST, RETURN>;
 }
 
 /**
  * Data-Last
  */
-export type DataLast<IMPL extends (...args: any[]) => any> = {
+export type DataLast<DATA, REST extends any[], RETURN> = {
   /**
    * data以外を先に渡した関数を呼び出すためのプロパティ(Data-Last)
    */
-  (...args: Parameters<DataLastFn<IMPL>>): ReturnType<DataLastFn<IMPL>>;
+  (...args: REST): (data: DATA) => RETURN;
 
   /**
    * Remedaのlazy関数を呼び出すためのプロパティ(Data-Last)
    */
-  lazy?: LazyFn<IMPL>;
+  lazy?: DATA extends any[] ? LazyFn<DATA, REST> : never;
 };
-
-/**
- * Data-Last用の関数の型定義
- */
-export type DataLastFn<IMPL extends (...args: any[]) => any> = IMPL extends (
-  data: infer DATA,
-  ...rest: infer REST
-) => any
-  ? (...args: REST) => (data: DATA) => ReturnType<IMPL>
-  : never;
 
 /**
  * Remedaのlazyに対応した関数の定義
  */
-export type LazyFn<IMPL extends (...args: any[]) => any> = IMPL extends (
-  data: (infer ITEM)[],
-  ...rest: infer REST
-) => any
-  ? <RETURN = ITEM>(
+export type LazyFn<
+  DATA extends any[],
+  REST extends any[],
+> = DATA extends (infer ITEM)[]
+  ? <RESULT = ITEM>(
       ...args: REST
     ) => (
       item: ITEM,
       index: number,
       data: readonly ITEM[],
-    ) => RemedaLazyResult<RETURN>
+    ) => RemedaLazyResult<RESULT>
   : never;
 
 /**
  * lazy関数の戻り値
  */
-export type RemedaLazyResult<T> =
+export type RemedaLazyResult<RESULT> =
   | RemedaLazyEmpty
-  | RemedaLazyMany<T>
-  | RemedaLazyNext<T>;
+  | RemedaLazyMany<RESULT>
+  | RemedaLazyNext<RESULT>;
 
 /**
  * lazy関数の戻り値(空の場合)
@@ -75,19 +65,19 @@ type RemedaLazyEmpty = {
 /**
  * lazy関数の戻り値(要素が1つの場合)
  */
-type RemedaLazyNext<T> = {
+type RemedaLazyNext<RESULT> = {
   done: boolean;
   hasNext: true;
   hasMany?: false | undefined;
-  next: T;
+  next: RESULT;
 };
 
 /**
  * lazy関数の戻り値(要素が複数の場合)
  */
-type RemedaLazyMany<T> = {
+type RemedaLazyMany<RESULT> = {
   done: boolean;
   hasNext: true;
   hasMany: true;
-  next: readonly T[];
+  next: readonly RESULT[];
 };

@@ -1,12 +1,24 @@
 /**
  * 渡された引数を左から見て最初のundefined以外の値を返す
- * @param args
+ * @param data 最初の値
+ * @param args 以降の値
  */
-export default function firstDefined<V = any>(...args: V[]): V | undefined {
+const firstDefined = <V>(data: V, ...args: V[]): V | undefined =>
+  _firstDefined(data, ...args);
+firstDefined.dataLast =
+  <V>(...args: V[]) =>
+  (data: V) =>
+    firstDefined(data, ...args);
+export default firstDefined;
+
+function _firstDefined<V>(data: V, ...args: V[]): V | undefined {
+  if (data !== undefined) {
+    return data;
+  }
   for (const arg of args) {
     if (arg !== undefined) {
       return arg;
     }
   }
-  return;
+  return undefined;
 }
