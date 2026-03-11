@@ -1,4 +1,3 @@
-import {} from '../../';
 import ensureArray from '../../ensureArray';
 import { NestedByOptions, NestedByResult } from './types';
 
