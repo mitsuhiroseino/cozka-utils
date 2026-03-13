@@ -1,5 +1,5 @@
-import isEqualWith from 'lodash-es/isEqualWith';
 import * as R from 'remeda';
+import isEqualWith from '../isEqualWith';
 import { COMPARE_MODE } from './constants';
 import { IsEqualByOptions } from './types';
 

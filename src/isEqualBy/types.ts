@@ -18,7 +18,7 @@ export type IsEqualByOptions = {
   compareMode?: CompareMode;
 
   /**
-   * equalityType='deeply'の場合: lodash.isEqualWithのcustomizer
+   * equalityType='deeply'の場合: isEqualWithのcustomizer
    * equalityType='deeply'以外の場合: value1,value2のみ有効。boolean以外の値を返した際には通常の比較を行う
    * @param value1
    * @param value2
@@ -34,6 +34,5 @@ export type IsEqualByOptions = {
     indexOrKey?: PropertyKey | undefined,
     value1Parent?: any,
     value2Parent?: any,
-    stack?: any,
   ) => boolean | void;
 };

@@ -28,7 +28,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "lodash-es": "^4.17.21",
+    "big.js": "^6.2.2",
     "remeda": "^2.33.6"
   },
   "devDependencies": {
@@ -46,8 +46,6 @@
     "@types/fs-extra": "^11.0.1",
     "@types/jest": "^29.5.0",
     "@types/jsesc": "^3",
-    "@types/lodash": "^4.17.16",
-    "@types/lodash-es": "^4.17.12",
     "@types/node": "^20.2.5",
     "@types/react": "^19",
     "babel-jest": "^29.7.0",

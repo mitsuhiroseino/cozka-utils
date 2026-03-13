@@ -1,7 +1,7 @@
 import { EnsureArrayOptions } from './types';
 
 /**
- * 値が配列でない場合、配列に変換し返却する
+ * 配列であることを保証する\
  * @param data 変換する値
  * @param options オプション
  * @returns 配列に変換された値

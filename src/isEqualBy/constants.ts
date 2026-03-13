@@ -13,7 +13,7 @@ export const COMPARE_MODE = {
   LOOSE: 'loose',
 
   /**
-   * `lodash.isEqual()`による比較
+   * `remeda.isDeepEqual()`による比較
    */
   DEEP: 'deep',
 } as const;

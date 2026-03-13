@@ -1,12 +1,12 @@
 /**
- * 任意の値を文字列に変換する\
+ * 文字列であることを保証する\
  * null や undefined は空文字列に変換される
  *
- * @param target 任意の値 or null or undefined
+ * @param data 任意の値 or null or undefined
  * @returns 文字列
  */
-const ensureString = (target: unknown | null | undefined): string =>
-  _ensureString(target);
+const ensureString = (data: unknown | null | undefined): string =>
+  _ensureString(data);
 ensureString.dataLast = () => ensureString;
 export default ensureString;
 

@@ -1,15 +1,13 @@
-import safeApply from '../safeApply';
+import maybeApply from '../maybeApply';
 
 /**
- * 非同期の関数として実行する
+ * 非同期で実行することを保証する\
  * @param fn
  * @param args
  */
-export default function ensureAsync<A extends unknown[], R>(
+export default async function ensureAsync<A extends unknown[], R>(
   fn: (...args: A) => R,
   args?: A,
 ): Promise<R> {
-  return Promise.resolve().then(() => {
-    return safeApply(fn, args);
-  });
+  return maybeApply(fn, args);
 }

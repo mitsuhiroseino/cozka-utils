@@ -1,11 +1,5 @@
 import * as R from 'remeda';
-
-export interface ThrottleResult<ARGS extends unknown[], RETURN> {
-  (...args: ARGS): void;
-  cancel(): void;
-  flush(): void;
-  isIdle(): boolean;
-}
+import { ThrottleOptions, ThrottleResult } from './types';
 
 /**
  * 対象の関数をthrottleする関数を作成する
@@ -13,15 +7,17 @@ export interface ThrottleResult<ARGS extends unknown[], RETURN> {
  * @param wait
  * @returns
  */
-export default function throttle<ARGS extends unknown[], RETURN>(
-  fn: (...args: ARGS) => RETURN,
+export default function throttle<ARGS extends unknown[]>(
+  fn: (...args: ARGS) => void,
   wait: number,
-): ThrottleResult<ARGS, RETURN> {
+  options: ThrottleOptions = {},
+): ThrottleResult<ARGS> {
+  const { triggerAt = 'end' } = options;
   const throttledFn = R.funnel((args: ARGS) => fn(...args), {
     reducer: (_, ...args: ARGS) => args,
     minQuietPeriodMs: wait,
     maxBurstDurationMs: wait,
-    triggerAt: 'end',
+    triggerAt: triggerAt as any,
   });
 
   return Object.assign((...args: ARGS) => throttledFn.call(...args), {

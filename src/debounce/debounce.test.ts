@@ -1,15 +1,7 @@
-import deb from 'lodash-es/debounce';
 import sleep from '../sleep';
 import debounce from './debounce';
 
 describe('debounce', () => {
-  test('lodash/debounce', async () => {
-    const debouncedFn = deb((num) => num + 1, 80);
-    console.log('01', debouncedFn(10));
-    console.log('02', debouncedFn(100));
-    console.log('03', debouncedFn(1000));
-  });
-
   test('debounceの基本的な動作1', async () => {
     const mockFn = jest.fn();
     const debouncedFn = debounce(mockFn, 80);

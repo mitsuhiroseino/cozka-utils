@@ -3,7 +3,7 @@
  * @param fn
  * @param args
  */
-export default function safeApply<A extends unknown[], R>(
+export default function maybeApply<A extends unknown[], R>(
   fn: ((...args: A) => R) | null | undefined,
   args?: A,
 ): R | undefined {
