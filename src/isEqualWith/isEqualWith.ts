@@ -59,7 +59,7 @@ export default function isEqualWith(
     }
 
     for (const k of keys) {
-      if (!Object.prototype.hasOwnProperty.call(other, k)) {
+      if (!Object.hasOwn(other, k)) {
         return false;
       }
       if (!isEqualWith(value[k], other[k], customizer, k, value, other)) {

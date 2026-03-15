@@ -1,4 +1,4 @@
-import newUtcDate from '../newUtcDate';
+import newUtcDate from '../createUtcDate';
 
 /**
  * 指定された日付型の値のローカル日時と同じUTC日時の日付型を作成します。

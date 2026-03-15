@@ -9,7 +9,7 @@
  * @param milliseconds UTCミリ秒
  * @returns
  */
-export default function newUtcDate(
+export default function createUtcDate(
   year: number,
   month: number = 0,
   date: number = 1,
