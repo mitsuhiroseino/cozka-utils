@@ -1,4 +1,4 @@
-import stableStringify from '../../stableStringify';
+import stableStringify from '../../object/stableStringify';
 
 /**
  * 変換前のキーと変換後のキーのキャッシュを管理するクラス

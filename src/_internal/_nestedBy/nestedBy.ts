@@ -1,4 +1,4 @@
-import ensureArray from '../../ensureArray';
+import ensureArray from '../../array/ensureArray';
 import { NestedByOptions, NestedByResult } from './types';
 
 export default function _nestedBy<I extends object, R = NestedByResult<I>>(
