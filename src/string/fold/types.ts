@@ -1,5 +1,3 @@
-import { TransformStringOptions } from '../transformString';
-
 /**
  * オプション
  */
@@ -53,9 +51,4 @@ export type FoldOptions = {
    * スペースを無視する
    */
   ignoreSpace?: boolean;
-
-  /**
-   * 文字列変換用のオプション
-   */
-  transformOptions?: TransformStringOptions;
 };

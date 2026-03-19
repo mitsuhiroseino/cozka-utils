@@ -1,4 +1,4 @@
-import escapeForRegex from '../escapeForRegex';
+import escapeForRegex from '../escapeRegExp';
 import { ReplacementMap } from './types';
 
 /**

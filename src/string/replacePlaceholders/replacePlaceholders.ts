@@ -1,42 +1,42 @@
-import get from 'lodash-es/get';
-import escapeForRegex from '../escapeForRegex';
+import get from '../../object/get';
+import escapeRegExp from '../escapeRegExp';
 import { ReplacePlaceholdersOptions } from './types';
 
-const getShallow = (values, key) => values[key];
+const getShallow = (values: any, key: string) => values[key];
 
 /**
- * template内のvaluesのキーを`{{`,`}}`で括った文字列と一致するプレイスホルダーをvaluesのプロパティの値で置換する
- * @param template テンプレート文字列
- * @param values 置換対象の値
- * @param options オプション
- * @returns
+ * テンプレート内のプレイスホルダーを指定された値で置換する
  */
 export default function replacePlaceholders(
   template: string,
-  values: { [key: string]: any } | any[],
+  values: Record<string, any> | any[],
   options: ReplacePlaceholdersOptions = {},
 ): string {
-  const { bracket = ['{{', '}}'], removePlaceholders, flatKeys } = options,
-    // valuesから値を取得する関数
-    getValue = flatKeys ? getShallow : get,
-    // 取得した値がnull,undefinedだった時の値を取得する関数
-    getFallbackValue = removePlaceholders
-      ? // 値がnull,undefinedの場合は空文字で置換
-        (match) => ''
-      : // プレイスホルダーを残す
-        (match) => match,
-    l = escapeForRegex(bracket[0]),
-    r = escapeForRegex(bracket[1]),
-    pattern = `${l}(.*?)${r}`,
-    regex = new RegExp(pattern, 'g');
+  const {
+    bracket = ['{{', '}}'],
+    removePlaceholders = false,
+    flatKeys = false,
+  } = options;
 
+  // 正規表現の構築
+  const left = escapeRegExp(bracket[0]);
+  const right = escapeRegExp(bracket[1]);
+  // {{ key }} のようなスペース入りにも対応
+  const regex = new RegExp(`${left}\\s*(.*?)\\s*${right}`, 'g');
+
+  // 値取得ロジックの決定
+  const getValue = flatKeys ? getShallow : get;
+
+  // 置換処理
   return template.replace(regex, (match, key) => {
     const value = getValue(values, key);
-    if (value != null) {
-      return value;
-    } else {
-      // 値がnull,undefinedの場合に返す値を取得
-      return getFallbackValue(match);
+
+    // null または undefined の場合
+    if (value == null) {
+      return removePlaceholders ? '' : match;
     }
+
+    // 値がオブジェクト等の場合は文字列に変換、基本は string/number を想定
+    return String(value);
   });
 }
