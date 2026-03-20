@@ -3,8 +3,8 @@ import { ReplacementMapDefinition } from '../_internal/_createReplacementMapComp
 /**
  * ひらがな → カタカナを変換する為のマップ
  */
-export const TO_KATAKANA = {
-  id: 'TO_KATAKANA',
+export const toKatakana = {
+  id: 'to-katakana',
   map: [
     ['ぁ', 'ァ'],
     ['あ', 'ア'],

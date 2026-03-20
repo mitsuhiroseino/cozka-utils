@@ -1,58 +1,58 @@
 import swapPairs from '../../array/swapPairs';
 import { ReplacementMapDefinition } from '../_internal/_createReplacementMapComposer';
 import {
-  TO_FULL_WIDTH,
-  TO_FULL_WIDTH_ALPHABET,
-  TO_FULL_WIDTH_KANA,
-  TO_FULL_WIDTH_NUMBER,
-  TO_FULL_WIDTH_SIGN,
-  TO_FULL_WIDTH_SPACE,
+  toFullWidth,
+  toFullWidthAlphabet,
+  toFullWidthKana,
+  toFullWidthNumber,
+  toFullWidthSign,
+  toFullWidthSpace,
 } from '../retypeToFullWidth/constants';
 
 /**
  * アルファベットの全角 -> 半角を変換する為のマップ
  */
-export const TO_HALF_WIDTH_ALPHABET = {
-  id: 'TO_HALF_WIDTH_ALPHABET',
-  map: swapPairs(TO_FULL_WIDTH_ALPHABET.map),
+export const toHalfWidtnAlphabet = {
+  id: 'to-half-widtn-alphabet',
+  map: swapPairs(toFullWidthAlphabet.map),
 } as const satisfies ReplacementMapDefinition;
 
 /**
  * 数字の全角 -> 半角を変換する為のマップ
  */
-export const TO_HALF_WIDTH_NUMBER = {
-  id: 'TO_HALF_WIDTH_NUMBER',
-  map: swapPairs(TO_FULL_WIDTH_NUMBER.map),
+export const toHalfWidtnNumber = {
+  id: 'to-half-widtn-number',
+  map: swapPairs(toFullWidthNumber.map),
 } as const satisfies ReplacementMapDefinition;
 
 /**
  * 記号の全角 -> 半角を変換する為のマップ
  */
-export const TO_HALF_WIDTH_SIGN = {
-  id: 'TO_HALF_WIDTH_SIGN',
-  map: swapPairs(TO_FULL_WIDTH_SIGN.map),
+export const toHalfWidtnSign = {
+  id: 'to-half-widtn-sign',
+  map: swapPairs(toFullWidthSign.map),
 } as const satisfies ReplacementMapDefinition;
 
 /**
  * スペースの全角 -> 半角を変換する為のマップ
  */
-export const TO_HALF_WIDTH_SPACE = {
-  id: 'TO_HALF_WIDTH_SPACE',
-  map: swapPairs(TO_FULL_WIDTH_SPACE.map),
+export const toHalfWidtnSpace = {
+  id: 'to-half-widtn-space',
+  map: swapPairs(toFullWidthSpace.map),
 } as const satisfies ReplacementMapDefinition;
 
 /**
  * スペースの全角 -> 半角を変換する為のマップ
  */
-export const TO_HALF_WIDTH_KANA = {
-  id: 'TO_HALF_WIDTH_KANA',
-  map: swapPairs(TO_FULL_WIDTH_KANA.map),
+export const toHalfWidtnKana = {
+  id: 'to-half-widtn-kana',
+  map: swapPairs(toFullWidthKana.map),
 } as const satisfies ReplacementMapDefinition;
 
 /**
  * 全角 -> 半角を変換する為のマップ
  */
-export const TO_HALF_WIDTH = {
-  id: 'TO_HALF_WIDTH',
-  map: swapPairs(TO_FULL_WIDTH.map),
+export const toHalfWidtn = {
+  id: 'to-half-widtn',
+  map: swapPairs(toFullWidth.map),
 } as const satisfies ReplacementMapDefinition;

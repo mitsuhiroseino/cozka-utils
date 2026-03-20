@@ -19,56 +19,63 @@ export default function fold(value: string, options: FoldOptions = {}): string {
       ignoreSokuon,
       ignoreYouon,
       ignoreChouon,
+      ignoreLineFeed,
       ignoreSpace,
     } = options;
     const transformationTypes: TransformationType[] = [];
 
     if (ingoreWidth) {
       // 半角・全角の違いを無視する
-      transformationTypes.push('TO_HALF_WIDTH');
+      transformationTypes.push(TransformationType.toHalfWidtn);
     }
 
     if (ignoreCase) {
       // 英字の大文字・小文字の違いを無視する
-      transformationTypes.push('TO_LOWER_CASE');
+      transformationTypes.push(TransformationType.toLowerCase);
     }
 
     if (ignoreKana) {
       // ひらがな・カタカナの違いを無視する
-      transformationTypes.push('TO_HIRAGANA');
+      transformationTypes.push(TransformationType.toHiragana);
     }
 
     if (ignoreDakuon) {
       // 濁音(ば)・半濁音(ぱ)と清音(は)の違いを無視する
-      transformationTypes.push('TO_HIRAGANA_SEION_FROM_DAKUON');
+      transformationTypes.push(TransformationType.toHiraganaSeionFromDakuon);
       if (!ignoreKana) {
-        transformationTypes.push('TO_KATAKANA_SEION_FROM_DAKUON');
+        transformationTypes.push(TransformationType.toKatakanaSeionFromDakuon);
       }
     }
 
     if (ignoreSokuon) {
       // 促音(っ)と清音(つ)の違いを無視する
-      transformationTypes.push('TO_HIRAGANA_SEION_FROM_SOKUON');
+      transformationTypes.push(TransformationType.toHiraganaSeionFromSokuon);
       if (!ignoreKana) {
-        transformationTypes.push('TO_KATAKANA_SEION_FROM_SOKUON');
+        transformationTypes.push(TransformationType.toKatakanaSeionFromSokuon);
       }
     }
 
     if (ignoreYouon) {
       // 拗音(ゃ)と清音(や)の違いを無視する
-      transformationTypes.push('TO_HIRAGANA_SEION_FROM_YOUON');
+      transformationTypes.push(TransformationType.toHiraganaSeionFromYouon);
       if (!ignoreKana) {
-        transformationTypes.push('TO_KATAKANA_SEION_FROM_YOUON');
+        transformationTypes.push(TransformationType.toKatakanaSeionFromYouon);
       }
     }
 
     if (ignoreChouon) {
       // 長音(ー)を無視する
-      transformationTypes.push('TO_WITHOUT_CHOUON');
+      transformationTypes.push(TransformationType.toNoChouon);
     }
+
+    if (ignoreLineFeed) {
+      // 改行を無視する
+      transformationTypes.push(TransformationType.toNoLineFeed);
+    }
+
     if (ignoreSpace) {
       // スペースを無視する
-      transformationTypes.push('TO_WITHOUT_SPACE');
+      transformationTypes.push(TransformationType.toNoSpace);
     }
 
     return transformString(value, transformationTypes);

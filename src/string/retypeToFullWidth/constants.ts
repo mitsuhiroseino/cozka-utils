@@ -3,8 +3,8 @@ import { ReplacementMapDefinition } from '../_internal/_createReplacementMapComp
 /**
  * アルファベットの半角 -> 全角を変換する為のマップ
  */
-export const TO_FULL_WIDTH_ALPHABET = {
-  id: 'TO_FULL_WIDTH_ALPHABET',
+export const toFullWidthAlphabet = {
+  id: 'to-full-width-alphabet',
   map: [
     ['A', 'Ａ'],
     ['a', 'ａ'],
@@ -64,8 +64,8 @@ export const TO_FULL_WIDTH_ALPHABET = {
 /**
  * 数字の半角 -> 全角を変換する為のマップ
  */
-export const TO_FULL_WIDTH_NUMBER = {
-  id: 'TO_FULL_WIDTH_NUMBER',
+export const toFullWidthNumber = {
+  id: 'to-full-width-number',
   map: [
     ['0', '０'],
     ['1', '１'],
@@ -83,8 +83,8 @@ export const TO_FULL_WIDTH_NUMBER = {
 /**
  * 記号の半角 -> 全角を変換する為のマップ
  */
-export const TO_FULL_WIDTH_SIGN = {
-  id: 'TO_FULL_WIDTH_SIGN',
+export const toFullWidthSign = {
+  id: 'to-full-width-sign',
   map: [
     ["'", '＇'],
     ['-', '－'],
@@ -135,16 +135,16 @@ export const TO_FULL_WIDTH_SIGN = {
 /**
  * スペースの半角 -> 全角を変換する為のマップ
  */
-export const TO_FULL_WIDTH_SPACE = {
-  id: 'TO_FULL_WIDTH_SPACE',
+export const toFullWidthSpace = {
+  id: 'to-full-width-space',
   map: [[' ', '　']],
 } as const satisfies ReplacementMapDefinition;
 
 /**
  * スペースの半角 -> 全角を変換する為のマップ
  */
-export const TO_FULL_WIDTH_KANA = {
-  id: 'TO_FULL_WIDTH_KANA',
+export const toFullWidthKana = {
+  id: 'to-full-width-kana',
   map: [
     ['ｧ', 'ァ'],
     ['ｱ', 'ア'],
@@ -237,13 +237,13 @@ export const TO_FULL_WIDTH_KANA = {
 /**
  * 半角 -> 全角を変換する為のマップ
  */
-export const TO_FULL_WIDTH = {
-  id: 'TO_FULL_WIDTH',
+export const toFullWidth = {
+  id: 'to-full-width',
   map: [
-    ...TO_FULL_WIDTH_ALPHABET.map,
-    ...TO_FULL_WIDTH_NUMBER.map,
-    ...TO_FULL_WIDTH_SIGN.map,
-    ...TO_FULL_WIDTH_SPACE.map,
-    ...TO_FULL_WIDTH_KANA.map,
+    ...toFullWidthAlphabet.map,
+    ...toFullWidthNumber.map,
+    ...toFullWidthSign.map,
+    ...toFullWidthSpace.map,
+    ...toFullWidthKana.map,
   ],
 } as const satisfies ReplacementMapDefinition;

@@ -1,1 +1,1 @@
-export { default } from './recaseLower';
+export { default } from './recaseUpper';

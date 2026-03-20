@@ -48,6 +48,11 @@ export type FoldOptions = {
   ignoreChouon?: boolean;
 
   /**
+   * 改行を無視する
+   */
+  ignoreLineFeed?: boolean;
+
+  /**
    * スペースを無視する
    */
   ignoreSpace?: boolean;

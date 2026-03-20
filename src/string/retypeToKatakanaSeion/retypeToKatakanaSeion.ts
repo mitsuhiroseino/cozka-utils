@@ -1,9 +1,9 @@
 import retype from '../retype';
 import {
-  TO_KATAKANA_SEION,
-  TO_KATAKANA_SEION_FROM_DAKUON,
-  TO_KATAKANA_SEION_FROM_SOKUON,
-  TO_KATAKANA_SEION_FROM_YOUON,
+  toKatakanaSeion,
+  toKatakanaSeionFromDakuon,
+  toKatakanaSeionFromSokuon,
+  toKatakanaSeionFromYouon,
 } from './constants';
 import { RetypeToKatakanaSeionOptions } from './types';
 
@@ -23,11 +23,11 @@ export default function retypeToKatakanaSeion(
   } = options;
   const definitions =
     !disableDakuon && !disableSokuon && !disableYouon
-      ? TO_KATAKANA_SEION
+      ? toKatakanaSeion
       : [
-          !disableDakuon && TO_KATAKANA_SEION_FROM_DAKUON,
-          !disableSokuon && TO_KATAKANA_SEION_FROM_SOKUON,
-          !disableYouon && TO_KATAKANA_SEION_FROM_YOUON,
+          !disableDakuon && toKatakanaSeionFromDakuon,
+          !disableSokuon && toKatakanaSeionFromSokuon,
+          !disableYouon && toKatakanaSeionFromYouon,
         ];
 
   return retype(str, definitions);

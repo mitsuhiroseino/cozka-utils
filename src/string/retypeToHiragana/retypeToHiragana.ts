@@ -1,5 +1,5 @@
 import retype from '../retype';
-import { TO_HIRAGANA } from './constants';
+import { toHiragana } from './constants';
 
 /**
  * カタカナ → ひらがな
@@ -7,5 +7,5 @@ import { TO_HIRAGANA } from './constants';
  * @returns
  */
 export default function retypeToKatakana(str: string): string {
-  return retype(str, TO_HIRAGANA);
+  return retype(str, toHiragana);
 }

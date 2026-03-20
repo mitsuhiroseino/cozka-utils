@@ -3,8 +3,8 @@ import { ReplacementMapDefinition } from '../_internal/_createReplacementMapComp
 /**
  * ひらがなの濁音 -> 清音を変換する為のマップ
  */
-export const TO_HIRAGANA_SEION_FROM_DAKUON = {
-  id: 'TO_HIRAGANA_SEION_FROM_DAKUON',
+export const toHiraganaSeionFromDakuon = {
+  id: 'to-hiragana-seion-from-dakuon',
   map: [
     ['ゔ', 'う'],
     ['が', 'か'],
@@ -38,16 +38,16 @@ export const TO_HIRAGANA_SEION_FROM_DAKUON = {
 /**
  * ひらがなの促音 -> 清音を変換する為のマップ
  */
-export const TO_HIRAGANA_SEION_FROM_SOKUON = {
-  id: 'TO_HIRAGANA_SEION_FROM_SOKUON',
+export const toHiraganaSeionFromSokuon = {
+  id: 'to-hiragana-seion-from-sokuon',
   map: [['っ', 'つ']],
 } as const satisfies ReplacementMapDefinition;
 
 /**
  * ひらがなの拗音 -> 清音を変換する為のマップ
  */
-export const TO_HIRAGANA_SEION_FROM_YOUON = {
-  id: 'TO_HIRAGANA_SEION_FROM_YOUON',
+export const toHiraganaSeionFromYouon = {
+  id: 'to-hiragana-seion-from-youon',
   map: [
     ['ぁ', 'あ'],
     ['ぃ', 'い'],
@@ -64,11 +64,11 @@ export const TO_HIRAGANA_SEION_FROM_YOUON = {
 /**
  * ひらがなの濁音・促音・拗音 -> 清音を変換する為のマップ
  */
-export const TO_HIRAGANA_SEION = {
-  id: 'TO_HIRAGANA_SEION',
+export const toHiraganaSeion = {
+  id: 'to-hiragana-seion',
   map: [
-    ...TO_HIRAGANA_SEION_FROM_DAKUON.map,
-    ...TO_HIRAGANA_SEION_FROM_SOKUON.map,
-    ...TO_HIRAGANA_SEION_FROM_YOUON.map,
+    ...toHiraganaSeionFromDakuon.map,
+    ...toHiraganaSeionFromSokuon.map,
+    ...toHiraganaSeionFromYouon.map,
   ],
 } as const satisfies ReplacementMapDefinition;

@@ -3,8 +3,8 @@ import { ReplacementMapDefinition } from '../_internal/_createReplacementMapComp
 /**
  * カタカナの濁音 -> 清音を変換する為のマップ
  */
-export const TO_KATAKANA_SEION_FROM_DAKUON = {
-  id: 'TO_KATAKANA_SEION_FROM_DAKUON',
+export const toKatakanaSeionFromDakuon = {
+  id: 'to-katakana-seion-from-dakuon',
   map: [
     ['ヴ', 'ウ'],
     ['ガ', 'カ'],
@@ -39,16 +39,16 @@ export const TO_KATAKANA_SEION_FROM_DAKUON = {
 /**
  * カタカナの促音 -> 清音を変換する為のマップ
  */
-export const TO_KATAKANA_SEION_FROM_SOKUON = {
-  id: 'TO_KATAKANA_SEION_FROM_SOKUON',
+export const toKatakanaSeionFromSokuon = {
+  id: 'to-katakana-seion-from-sokuon',
   map: [['ッ', 'ツ']],
 } as const satisfies ReplacementMapDefinition;
 
 /**
  * カタカナの拗音 -> 清音を変換する為のマップ
  */
-export const TO_KATAKANA_SEION_FROM_YOUON = {
-  id: 'TO_KATAKANA_SEION_FROM_YOUON',
+export const toKatakanaSeionFromYouon = {
+  id: 'to-katakana-seion-from-youon',
   map: [
     ['ァ', 'ア'],
     ['ィ', 'イ'],
@@ -65,11 +65,11 @@ export const TO_KATAKANA_SEION_FROM_YOUON = {
 /**
  * カタカナの濁音・促音・拗音 -> 清音を変換する為のマップ
  */
-export const TO_KATAKANA_SEION = {
-  id: 'TO_KATAKANA_SEION',
+export const toKatakanaSeion = {
+  id: 'to-katakana-seion',
   map: [
-    ...TO_KATAKANA_SEION_FROM_DAKUON.map,
-    ...TO_KATAKANA_SEION_FROM_SOKUON.map,
-    ...TO_KATAKANA_SEION_FROM_YOUON.map,
+    ...toKatakanaSeionFromDakuon.map,
+    ...toKatakanaSeionFromSokuon.map,
+    ...toKatakanaSeionFromYouon.map,
   ],
 } as const satisfies ReplacementMapDefinition;

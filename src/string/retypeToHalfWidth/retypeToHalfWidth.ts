@@ -1,11 +1,11 @@
 import retype from '../retype';
 import {
-  TO_HALF_WIDTH,
-  TO_HALF_WIDTH_ALPHABET,
-  TO_HALF_WIDTH_KANA,
-  TO_HALF_WIDTH_NUMBER,
-  TO_HALF_WIDTH_SIGN,
-  TO_HALF_WIDTH_SPACE,
+  toHalfWidtn,
+  toHalfWidtnAlphabet,
+  toHalfWidtnKana,
+  toHalfWidtnNumber,
+  toHalfWidtnSign,
+  toHalfWidtnSpace,
 } from './constants';
 import { RetypeToHalfWidthOptions } from './types';
 
@@ -31,13 +31,13 @@ export default function retypeToFullWidth(
     !disableSign &&
     !disableSpace &&
     !disableKatakana
-      ? [TO_HALF_WIDTH]
+      ? [toHalfWidtn]
       : [
-          !disableAlphabet && TO_HALF_WIDTH_ALPHABET,
-          !disableNumber && TO_HALF_WIDTH_NUMBER,
-          !disableSign && TO_HALF_WIDTH_SIGN,
-          !disableSpace && TO_HALF_WIDTH_SPACE,
-          !disableKatakana && TO_HALF_WIDTH_KANA,
+          !disableAlphabet && toHalfWidtnAlphabet,
+          !disableNumber && toHalfWidtnNumber,
+          !disableSign && toHalfWidtnSign,
+          !disableSpace && toHalfWidtnSpace,
+          !disableKatakana && toHalfWidtnKana,
         ];
 
   return retype(str, definitions);

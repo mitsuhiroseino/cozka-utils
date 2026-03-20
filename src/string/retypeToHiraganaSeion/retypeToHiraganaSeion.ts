@@ -1,9 +1,9 @@
 import retype from '../retype';
 import {
-  TO_HIRAGANA_SEION,
-  TO_HIRAGANA_SEION_FROM_DAKUON,
-  TO_HIRAGANA_SEION_FROM_SOKUON,
-  TO_HIRAGANA_SEION_FROM_YOUON,
+  toHiraganaSeion,
+  toHiraganaSeionFromDakuon,
+  toHiraganaSeionFromSokuon,
+  toHiraganaSeionFromYouon,
 } from './constants';
 import { RetypeToHiraganaSeionOptions } from './types';
 
@@ -23,11 +23,11 @@ export default function retypeToHiraganaSeion(
   } = options;
   const definitions =
     !disableDakuon && !disableSokuon && !disableYouon
-      ? TO_HIRAGANA_SEION
+      ? toHiraganaSeion
       : [
-          !disableDakuon && TO_HIRAGANA_SEION_FROM_DAKUON,
-          !disableSokuon && TO_HIRAGANA_SEION_FROM_SOKUON,
-          !disableYouon && TO_HIRAGANA_SEION_FROM_YOUON,
+          !disableDakuon && toHiraganaSeionFromDakuon,
+          !disableSokuon && toHiraganaSeionFromSokuon,
+          !disableYouon && toHiraganaSeionFromYouon,
         ];
 
   return retype(str, definitions);
