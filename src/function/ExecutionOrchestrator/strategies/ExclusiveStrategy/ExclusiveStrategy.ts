@@ -1,7 +1,7 @@
 import { LooseFunction } from '../../../../types';
 import { CANCEL } from '../../constants';
 import FunctionStrategyBase from '../FunctionStrategyBase';
-import { AwaitedReturn, AwaitedReturnFunction } from '../types';
+import { AwaitedReturn, StrategyFunction } from '../types';
 import { ExclusiveStrategyType } from './constants';
 import { ExclusiveStrategyOptions } from './types';
 
@@ -15,10 +15,10 @@ export default class ExclusiveStrategy extends FunctionStrategyBase<ExclusiveStr
     super(options);
   }
 
-  _wrap<T extends LooseFunction>(fn: T) {
+  _wrap<T extends LooseFunction>(fn: T): StrategyFunction<T> {
     const me = this;
     const execute = me._createExecutionFn(fn);
-    return function (this: unknown, ...args: Parameters<T>): AwaitedReturn<T> {
+    return (scope: unknown, args: Parameters<T>): AwaitedReturn<T> => {
       // 実行しているものがあるかチェック
       if (me.isRunning) {
         // あったらキャンセル
@@ -26,7 +26,7 @@ export default class ExclusiveStrategy extends FunctionStrategyBase<ExclusiveStr
       }
 
       // fnを非同期で呼び出す
-      return execute(this, args) as AwaitedReturn<T>;
-    } as AwaitedReturnFunction<T>;
+      return execute(scope, args) as AwaitedReturn<T>;
+    };
   }
 }

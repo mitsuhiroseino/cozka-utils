@@ -1,7 +1,7 @@
 import { LooseFunction } from '../../../../types';
 import { CANCEL } from '../../constants';
 import FunctionStrategyBase from '../FunctionStrategyBase';
-import { AwaitedReturn, AwaitedReturnFunction } from '../types';
+import { AwaitedReturn, StrategyFunction } from '../types';
 import { DebounceStrategyType } from './constants';
 import { DebounceStrategyOptions } from './types';
 
@@ -37,11 +37,11 @@ export default class DebounceStrategy extends FunctionStrategyBase<DebounceStrat
     this._sequential = sequential ?? false;
   }
 
-  _wrap<T extends LooseFunction>(fn: T): AwaitedReturnFunction<T> {
+  _wrap<T extends LooseFunction>(fn: T): StrategyFunction<T> {
     const me = this;
     const execute = me._createExecutionFn(fn);
 
-    return function (this: unknown, ...args: Parameters<T>): AwaitedReturn<T> {
+    return (scope: unknown, args: Parameters<T>): AwaitedReturn<T> => {
       return new Promise((resolve, reject) => {
         // 1. すでに待機中のタイマーがあればキャンセル（最新の呼び出しを優先）
         if (me._waiting) {
@@ -59,18 +59,18 @@ export default class DebounceStrategy extends FunctionStrategyBase<DebounceStrat
             // 前回の関数の実行が終わるのを待ってから、今回の実行を開始する
             me._tail = me._tail
               .then(async () => {
-                execute(this, args).then(resolve).catch(reject);
+                execute(scope, args).then(resolve).catch(reject);
               })
               .catch(() => {
                 // 前の実行がエラーでも次へ進む
               });
           } else {
             //sequentialがfalseの場合は、完了を待たずに即実行
-            execute(this, args).then(resolve).catch(reject);
+            execute(scope, args).then(resolve).catch(reject);
           }
         }, me._wait);
         me._waiting = { timeout, resolve };
-      }) as AwaitedReturn<T>;
-    } as AwaitedReturnFunction<T>;
+      });
+    };
   }
 }

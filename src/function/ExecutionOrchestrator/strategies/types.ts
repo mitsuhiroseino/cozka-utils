@@ -16,6 +16,14 @@ export type AwaitedReturnFunction<T extends LooseFunction> = (
 ) => AwaitedReturn<T>;
 
 /**
+ * ストラテジーの関数
+ */
+export type StrategyFunction<T extends LooseFunction> = (
+  scope: unknown,
+  args: Parameters<T>,
+) => AwaitedReturn<T>;
+
+/**
  * 関数グループ
  */
 export interface FunctionStrategy<T extends string> {

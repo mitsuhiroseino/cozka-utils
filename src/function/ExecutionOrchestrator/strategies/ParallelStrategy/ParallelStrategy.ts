@@ -1,7 +1,6 @@
 import { LooseFunction } from '../../../../types';
-import { CANCEL } from '../../constants';
 import FunctionStrategyBase from '../FunctionStrategyBase';
-import { AwaitedReturn, AwaitedReturnFunction } from '../types';
+import { AwaitedReturn, StrategyFunction } from '../types';
 import { ParallelStrategyType } from './constants';
 import { ParallelStrategyOptions } from './types';
 
@@ -37,16 +36,16 @@ export default class ParallelStrategy extends FunctionStrategyBase<ParallelStrat
   /**
    * 関数をラップする
    */
-  _wrap<T extends LooseFunction>(fn: T): AwaitedReturnFunction<T> {
+  _wrap<T extends LooseFunction>(fn: T): StrategyFunction<T> {
     const me = this;
     const execute = me._createExecutionFn(fn);
 
-    return function (this: unknown, ...args: Parameters<T>): AwaitedReturn<T> {
+    return (scope: unknown, args: Parameters<T>): AwaitedReturn<T> => {
       return new Promise((resolve, reject) => {
         // タスクをキューに追加
         me._queue.push({
           execute,
-          scope: this,
+          scope,
           args,
           resolve,
           reject,
@@ -54,8 +53,8 @@ export default class ParallelStrategy extends FunctionStrategyBase<ParallelStrat
 
         // キューの消化を試みる
         me._process();
-      }) as AwaitedReturn<T>;
-    } as AwaitedReturnFunction<T>;
+      });
+    };
   }
 
   /**

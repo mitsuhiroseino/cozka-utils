@@ -1,7 +1,7 @@
 import * as R from 'remeda';
 import { LooseFunction } from '../../../../types';
 import FunctionStrategyBase from '../FunctionStrategyBase';
-import { AwaitedReturnFunction } from '../types';
+import { AwaitedReturn, StrategyFunction } from '../types';
 import { SerialStrategyType } from './constants';
 import { SerialStrategyOptions } from './types';
 
@@ -21,21 +21,21 @@ export default class SerialStrategy extends FunctionStrategyBase<SerialStrategyT
     super(options);
   }
 
-  _wrap<T extends LooseFunction>(fn: T) {
+  _wrap<T extends LooseFunction>(fn: T): StrategyFunction<T> {
     const me = this;
     const execute = me._createExecutionFn(fn);
-    return function (this: unknown, ...args: Parameters<T>) {
+    return (scope: unknown, args: Parameters<T>): AwaitedReturn<T> => {
       // fnを非同期で呼び出す関数
       // 前回のpromiseがエラーで終わっていても次の関数を呼び出す
       const promise = me._tail.then(
-        () => execute(this, args),
-        () => execute(this, args),
+        () => execute(scope, args),
+        () => execute(scope, args),
       );
       // エラーでも次が続けられるようにnoopを仕込んでおく
       const noop = R.constant(undefined);
       me._tail = promise.then(noop).catch(noop);
 
       return promise;
-    } as AwaitedReturnFunction<T>;
+    };
   }
 }

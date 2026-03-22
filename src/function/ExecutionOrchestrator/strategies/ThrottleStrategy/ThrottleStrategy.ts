@@ -1,7 +1,7 @@
 import { LooseFunction } from '../../../../types';
 import { CANCEL } from '../../constants';
 import FunctionStrategyBase from '../FunctionStrategyBase';
-import { AwaitedReturn, AwaitedReturnFunction } from '../types';
+import { AwaitedReturn, StrategyFunction } from '../types';
 import { ThrottleStrategyType } from './constants';
 import { ThrottleStrategyOptions } from './types';
 
@@ -38,11 +38,11 @@ export default class ThrottleStrategy extends FunctionStrategyBase<ThrottleStrat
    * 関数をラップする
    * クールタイム中の呼び出しは無視され、undefined を返す
    */
-  _wrap<T extends LooseFunction>(fn: T): AwaitedReturnFunction<T> {
+  _wrap<T extends LooseFunction>(fn: T): StrategyFunction<T> {
     const me = this;
     const execute = me._createExecutionFn(fn);
 
-    return function (this: unknown, ...args: Parameters<T>): AwaitedReturn<T> {
+    return (scope: unknown, args: Parameters<T>): AwaitedReturn<T> => {
       // クールタイム中なら即座に CANCEL を返す
       if (me._isThrottling) {
         return Promise.resolve(CANCEL);
@@ -59,16 +59,16 @@ export default class ThrottleStrategy extends FunctionStrategyBase<ThrottleStrat
           // 前の実行が終わるのを待って実行
           me._tail = me._tail
             .then(() => {
-              execute(this, args).then(resolve).catch(reject);
+              execute(scope, args).then(resolve).catch(reject);
             })
             .catch(() => {
               /* 前のエラーを無視して次へ */
             });
         } else {
           // 即時実行
-          execute(this, args).then(resolve).catch(reject);
+          execute(scope, args).then(resolve).catch(reject);
         }
-      }) as AwaitedReturn<T>;
-    } as AwaitedReturnFunction<T>;
+      });
+    };
   }
 }

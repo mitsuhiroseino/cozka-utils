@@ -20,4 +20,7 @@ export const STRATEGIES = {
   [ThrottleStrategyType]: ThrottleStrategy,
 } as const;
 
+/**
+ * キャンセル時に返す戻り値
+ */
 export const CANCEL = Symbol('cancel');

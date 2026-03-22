@@ -1,10 +1,12 @@
 import { LooseFunction } from '../../../../types';
+import { CANCEL } from '../../constants';
 import {
   AwaitedReturn,
   AwaitedReturnFunction,
   FunctionStrategy,
+  StrategyFunction,
 } from '../types';
-import { FunctionStrategyBaseOptions } from './types';
+import { CancelPolicy, FunctionStrategyBaseOptions } from './types';
 
 /**
  * ストラテジーの基底クラス
@@ -22,6 +24,8 @@ export default abstract class FunctionStrategyBase<T extends string>
    */
   private _id: string;
 
+  private _cancelPolicy: CancelPolicy;
+
   /**
    * 実行している関数の件数
    */
@@ -30,6 +34,7 @@ export default abstract class FunctionStrategyBase<T extends string>
   constructor(options: FunctionStrategyBaseOptions<T>) {
     this._type = options.type;
     this._id = options.id;
+    this._cancelPolicy = options.cancelPolicy ?? 'resolve';
   }
 
   /**
@@ -105,14 +110,39 @@ export default abstract class FunctionStrategyBase<T extends string>
       return undefined;
     }
 
-    return this._wrap(fn);
+    const me = this;
+    const wrapedFn = me._wrap(fn);
+    const cancelPolicy = me._cancelPolicy;
+
+    return function (this: unknown, ...args: Parameters<T>): AwaitedReturn<T> {
+      return new Promise((resolve, reject) => {
+        wrapedFn(this, args)
+          .then((result) => {
+            if (cancelPolicy === 'resolve') {
+              // キャンセルをresolveで受け取る場合
+              resolve(result);
+            } else if (cancelPolicy === 'reject') {
+              // キャンセルをrejectで受け取る場合
+              if (result === CANCEL) {
+                reject(CANCEL);
+              } else {
+                resolve(result);
+              }
+            } else {
+              // キャンセル時に何もしない場合
+              if (result !== CANCEL) {
+                resolve(result);
+              }
+            }
+          })
+          .catch(reject);
+      });
+    };
   }
 
   /**
    * 関数をラップする
    * @param fn
    */
-  protected abstract _wrap<T extends LooseFunction>(
-    fn: T,
-  ): AwaitedReturnFunction<T>;
+  protected abstract _wrap<T extends LooseFunction>(fn: T): StrategyFunction<T>;
 }

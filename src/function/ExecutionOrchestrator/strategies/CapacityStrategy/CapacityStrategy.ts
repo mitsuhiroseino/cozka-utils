@@ -1,7 +1,7 @@
 import { LooseFunction } from '../../../../types';
 import { CANCEL } from '../../constants';
 import FunctionStrategyBase from '../FunctionStrategyBase';
-import { AwaitedReturn, AwaitedReturnFunction } from '../types';
+import { AwaitedReturn, StrategyFunction } from '../types';
 import { CapacityStrategyType } from './constants';
 import { CapacityStrategyOptions } from './types';
 
@@ -26,11 +26,11 @@ export default class CapacityStrategy extends FunctionStrategyBase<CapacityStrat
    * 関数をラップする
    * 実行枠がいっぱいの場合は undefined を返して即終了する
    */
-  _wrap<T extends LooseFunction>(fn: T): AwaitedReturnFunction<T> {
+  _wrap<T extends LooseFunction>(fn: T): StrategyFunction<T> {
     const me = this;
     const execute = me._createExecutionFn(fn);
 
-    return function (this: unknown, ...args: Parameters<T>): AwaitedReturn<T> {
+    return (scope: unknown, args: Parameters<T>): AwaitedReturn<T> => {
       // 現在の実行数が上限に達しているかチェック
       if (me.running >= me._limit) {
         // 実行せずに終了
@@ -38,7 +38,7 @@ export default class CapacityStrategy extends FunctionStrategyBase<CapacityStrat
       }
 
       // 枠が空いていれば非同期で実行を開始
-      return execute(this, args);
-    } as AwaitedReturnFunction<T>;
+      return execute(scope, args);
+    };
   }
 }
