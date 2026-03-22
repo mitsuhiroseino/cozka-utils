@@ -99,12 +99,7 @@ export default class ExecutionOrchestrator {
    */
   remove(type: StrategyType, id: string): boolean {
     const key = this._key(type, id);
-    const strategy = this._strategies.get(key);
-    if (!strategy) {
-      return false;
-    }
-    this._strategies.delete(key);
-    return true;
+    return this._strategies.delete(key);
   }
 
   /**

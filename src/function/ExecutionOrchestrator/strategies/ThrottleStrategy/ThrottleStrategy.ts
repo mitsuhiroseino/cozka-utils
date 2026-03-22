@@ -1,4 +1,5 @@
 import { LooseFunction } from '../../../../types';
+import { CANCEL } from '../../constants';
 import FunctionStrategyBase from '../FunctionStrategyBase';
 import { AwaitedReturn, AwaitedReturnFunction } from '../types';
 import { ThrottleStrategyType } from './constants';
@@ -10,20 +11,27 @@ import { ThrottleStrategyOptions } from './types';
  * クールタイム中に呼ばれた関数は無視される\
  */
 export default class ThrottleStrategy extends FunctionStrategyBase<ThrottleStrategyType> {
-  /**
-   * 待機時間 (ms)
-   */
+  // 待ち時間
   private _wait: number;
+
+  // 実行完了を待つか
+  private _sequential: boolean;
 
   /**
    * クールタイム中（実行禁止期間）かどうか
    */
   private _isThrottling = false;
 
+  /**
+   * 実行中のPromise（sequential用）
+   */
+  private _tail: Promise<any> = Promise.resolve();
+
   constructor(options: ThrottleStrategyOptions) {
-    const { wait, ...rest } = options;
+    const { wait, sequential, ...rest } = options;
     super(rest);
     this._wait = wait ?? 0;
+    this._sequential = sequential ?? false;
   }
 
   /**
@@ -35,21 +43,32 @@ export default class ThrottleStrategy extends FunctionStrategyBase<ThrottleStrat
     const execute = me._createExecutionFn(fn);
 
     return function (this: unknown, ...args: Parameters<T>): AwaitedReturn<T> {
-      // クールタイム中なら何もしない
+      // クールタイム中なら即座に CANCEL を返す
       if (me._isThrottling) {
-        return;
+        return Promise.resolve(CANCEL);
       }
 
-      // 実行フラグを立てる
+      // クールタイム開始
       me._isThrottling = true;
-
-      // 指定時間後にフラグを解除する
       setTimeout(() => {
         me._isThrottling = false;
       }, me._wait);
 
-      // 関数を実行
-      return execute(this, args) as AwaitedReturn<T>;
+      return new Promise((resolve, reject) => {
+        if (me._sequential) {
+          // 前の実行が終わるのを待って実行
+          me._tail = me._tail
+            .then(() => {
+              execute(this, args).then(resolve).catch(reject);
+            })
+            .catch(() => {
+              /* 前のエラーを無視して次へ */
+            });
+        } else {
+          // 即時実行
+          execute(this, args).then(resolve).catch(reject);
+        }
+      }) as AwaitedReturn<T>;
     } as AwaitedReturnFunction<T>;
   }
 }

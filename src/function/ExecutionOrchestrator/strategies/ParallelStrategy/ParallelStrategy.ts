@@ -1,4 +1,5 @@
 import { LooseFunction } from '../../../../types';
+import { CANCEL } from '../../constants';
 import FunctionStrategyBase from '../FunctionStrategyBase';
 import { AwaitedReturn, AwaitedReturnFunction } from '../types';
 import { ParallelStrategyType } from './constants';
@@ -14,7 +15,7 @@ export default class ParallelStrategy extends FunctionStrategyBase<ParallelStrat
   /**
    * 同時実行の上限数
    */
-  private _concurrency: number;
+  private _limit: number;
 
   /**
    * 実行待ちのタスクキュー
@@ -29,8 +30,8 @@ export default class ParallelStrategy extends FunctionStrategyBase<ParallelStrat
 
   constructor(options: ParallelStrategyOptions) {
     super(options);
-    // デフォルトは 1 (直列)
-    this._concurrency = options.concurrency ?? 1;
+    // デフォルトは4
+    this._limit = options.limit ?? 4;
   }
 
   /**
@@ -62,7 +63,7 @@ export default class ParallelStrategy extends FunctionStrategyBase<ParallelStrat
    */
   private async _process() {
     // 実行枠が空いていない、または待ち行列が空なら何もしない
-    if (this.running >= this._concurrency || this._queue.length === 0) {
+    if (this.running >= this._limit || this._queue.length === 0) {
       return;
     }
 
@@ -83,7 +84,7 @@ export default class ParallelStrategy extends FunctionStrategyBase<ParallelStrat
         this._process();
       });
 
-    // 枠がある限り、再帰的に次のタスクも開始させる（並列実行のため）
+    // 再帰的に次のタスクも開始させる
     this._process();
   }
 }

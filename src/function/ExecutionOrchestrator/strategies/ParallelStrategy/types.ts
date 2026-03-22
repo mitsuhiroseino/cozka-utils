@@ -3,5 +3,5 @@ import { ParallelStrategyType } from './constants';
 
 export type ParallelStrategyOptions =
   FunctionStrategyBaseOptions<ParallelStrategyType> & {
-    concurrency: number;
+    limit: number;
   };

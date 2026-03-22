@@ -1,4 +1,4 @@
-import noop from 'lodash-es/noop';
+import * as R from 'remeda';
 import { LooseFunction } from '../../../../types';
 import FunctionStrategyBase from '../FunctionStrategyBase';
 import { AwaitedReturnFunction } from '../types';
@@ -32,6 +32,7 @@ export default class SerialStrategy extends FunctionStrategyBase<SerialStrategyT
         () => execute(this, args),
       );
       // エラーでも次が続けられるようにnoopを仕込んでおく
+      const noop = R.constant(undefined);
       me._tail = promise.then(noop).catch(noop);
 
       return promise;

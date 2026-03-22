@@ -1,4 +1,5 @@
 import { LooseFunction } from '../../../../types';
+import { CANCEL } from '../../constants';
 import FunctionStrategyBase from '../FunctionStrategyBase';
 import { AwaitedReturn, AwaitedReturnFunction } from '../types';
 import { CapacityStrategyType } from './constants';
@@ -32,13 +33,12 @@ export default class CapacityStrategy extends FunctionStrategyBase<CapacityStrat
     return function (this: unknown, ...args: Parameters<T>): AwaitedReturn<T> {
       // 現在の実行数が上限に達しているかチェック
       if (me.running >= me._limit) {
-        // キャパオーバーのため、実行せずに終了（キャンセル）
-        // 必要に応じてここでログ出力や、特定のエラーを返すことも検討してください
-        return;
+        // 実行せずに終了
+        return Promise.resolve(CANCEL);
       }
 
       // 枠が空いていれば非同期で実行を開始
-      return execute(this, args) as AwaitedReturn<T>;
+      return execute(this, args);
     } as AwaitedReturnFunction<T>;
   }
 }

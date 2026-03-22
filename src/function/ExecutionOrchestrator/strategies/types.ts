@@ -5,7 +5,7 @@ import { CANCEL } from '../constants';
  * 戻り値(promise)
  */
 export type AwaitedReturn<T extends LooseFunction> =
-  | Promise<Awaited<ReturnType<T>>>
+  | Promise<ReturnType<T>>
   | Promise<typeof CANCEL>;
 
 /**

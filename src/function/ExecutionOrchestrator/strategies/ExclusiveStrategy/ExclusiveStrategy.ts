@@ -19,11 +19,13 @@ export default class ExclusiveStrategy extends FunctionStrategyBase<ExclusiveStr
     const me = this;
     const execute = me._createExecutionFn(fn);
     return function (this: unknown, ...args: Parameters<T>): AwaitedReturn<T> {
+      // 実行しているものがあるかチェック
       if (me.isRunning) {
+        // あったらキャンセル
         return Promise.resolve(CANCEL);
       }
 
-      // fnを非同期で呼び出す関数
+      // fnを非同期で呼び出す
       return execute(this, args) as AwaitedReturn<T>;
     } as AwaitedReturnFunction<T>;
   }

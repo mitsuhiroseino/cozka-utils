@@ -1,58 +1,76 @@
 import { LooseFunction } from '../../../../types';
+import { CANCEL } from '../../constants';
 import FunctionStrategyBase from '../FunctionStrategyBase';
 import { AwaitedReturn, AwaitedReturnFunction } from '../types';
 import { DebounceStrategyType } from './constants';
 import { DebounceStrategyOptions } from './types';
 
 /**
- * 遅延確定実行ストラテジー
- * 関数が呼ばれてから指定時間（wait）経過後に実行する\
- * 実行前に再度呼び出しがあった場合はタイマーをリセットし、再度指定時間の経過を待つ\
+ * デバウンスストラテジー
+ * 指定時間内に再呼び出しがなければ実行。
+ * 前回の実行が完了していない場合は、完了を待ってから連続して実行します。
  */
 export default class DebounceStrategy extends FunctionStrategyBase<DebounceStrategyType> {
-  /**
-   * 待ち時間
-   */
+  // 待ち時間
   private _wait: number;
 
-  /**
-   * 実行中のsetTimeoutのタイマーID
-   */
-  private _timeout: ReturnType<typeof setTimeout> | null = null;
+  // 実行完了を待つか
+  private _sequential: boolean;
 
-  private _currentFn: any;
-  private _currentArgs: any;
+  /**
+   * 実行待ち情報（タイマー管理用）
+   */
+  private _waiting: {
+    timeout: ReturnType<typeof setTimeout>;
+    resolve: (value: any) => void;
+  } | null = null;
+
+  /**
+   * 実行中のPromise（sequential用）
+   */
+  private _tail: Promise<any> = Promise.resolve();
 
   constructor(options: DebounceStrategyOptions) {
-    const { wait, ...rest } = options;
+    const { wait, sequential, ...rest } = options;
     super(rest);
     this._wait = wait ?? 0;
+    this._sequential = sequential ?? false;
   }
 
-  /**
-   * 呼ばれてからwaitで指定された時間が経過するまでに
-   * 同じストラテジー内の関数が実行されなかった場合に処理を行う関数を作成する
-   *
-   * @param fn
-   * @returns
-   */
-  _wrap<T extends LooseFunction>(
-    fn: T,
-  ): (...args: Parameters<T>) => AwaitedReturn<T> {
+  _wrap<T extends LooseFunction>(fn: T): AwaitedReturnFunction<T> {
     const me = this;
     const execute = me._createExecutionFn(fn);
-    // 実行時のスコープ(this)を取得したいのでfunctionで定義
-    return function (this: unknown, ...args: Parameters<T>) {
-      return new Promise<ReturnType<T>>((resolve, reject) => {
-        if (me._timeout) {
-          clearTimeout(me._timeout);
+
+    return function (this: unknown, ...args: Parameters<T>): AwaitedReturn<T> {
+      return new Promise((resolve, reject) => {
+        // 1. すでに待機中のタイマーがあればキャンセル（最新の呼び出しを優先）
+        if (me._waiting) {
+          clearTimeout(me._waiting.timeout);
+          me._waiting.resolve(CANCEL);
+          me._waiting = null;
         }
-        me._timeout = setTimeout(() => {
-          // waitの間に他の関数が呼ばれなければ、この処理が実行される
-          me._timeout = null;
-          execute(this, args).then(resolve).catch(reject);
+
+        // 新しいタイマーをセット
+        const timeout = setTimeout(() => {
+          // 実行できたのでクリア
+          me._waiting = null;
+
+          if (me._sequential) {
+            // 前回の関数の実行が終わるのを待ってから、今回の実行を開始する
+            me._tail = me._tail
+              .then(async () => {
+                execute(this, args).then(resolve).catch(reject);
+              })
+              .catch(() => {
+                // 前の実行がエラーでも次へ進む
+              });
+          } else {
+            //sequentialがfalseの場合は、完了を待たずに即実行
+            execute(this, args).then(resolve).catch(reject);
+          }
         }, me._wait);
-      });
+        me._waiting = { timeout, resolve };
+      }) as AwaitedReturn<T>;
     } as AwaitedReturnFunction<T>;
   }
 }

@@ -78,8 +78,6 @@ export default abstract class FunctionStrategyBase<T extends string>
    * 対象の関数を非同期で実行する関数を作成する共通処理
    *
    * @param fn 対象の関数
-   * @param scope 関数の実行スコープ
-   * @param args 関数の引数
    * @returns
    */
   protected _createExecutionFn<T extends LooseFunction>(fn: T) {
