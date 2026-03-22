@@ -30,10 +30,10 @@ function _flattenObject(
 ): any {
   if (R.isPlainObject(data) || (Array.isArray(data) && !options.ignoreArray)) {
     // オブジェクトの場合は配下要素をフラットな状態に変換
-    let flatObj: { [key: string]: unknown } = {},
-      currentPath: string;
-    const { noPathKeys = false, keySeparator = '.' } = options,
-      keys = Object.keys(data);
+    let flatObj: { [key: string]: unknown } = {};
+    let currentPath: string;
+    const { noPathKeys = false, keySeparator = '.' } = options;
+    const keys = Object.keys(data);
 
     for (const key of keys) {
       const value: unknown = data[key];

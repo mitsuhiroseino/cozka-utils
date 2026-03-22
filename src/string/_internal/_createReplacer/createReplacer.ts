@@ -1,4 +1,3 @@
-import ensureMap from 'src/map/ensureMap';
 import escapeRegExp from '../../escapeRegExp';
 import { CreateReplacerResult, ReplacementMap } from './types';
 
@@ -11,8 +10,10 @@ const replacers = new WeakMap<object, CreateReplacerResult>();
  */
 export default function createReplacer(
   map: ReplacementMap,
+  keyObj?: object,
 ): CreateReplacerResult {
-  let replacer = replacers.get(map);
+  const key = keyObj ?? map;
+  let replacer = replacers.get(key);
   if (!replacer) {
     const entries = Array.from(map.entries());
     const pattern = entries
@@ -29,7 +30,7 @@ export default function createReplacer(
         return map.get(matched) ?? matched;
       });
     };
-    replacers.set(map, replacer);
+    replacers.set(key, replacer);
   }
   return replacer;
 }

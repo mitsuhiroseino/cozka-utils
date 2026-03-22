@@ -1,5 +1,13 @@
 import { ForEachValuesOptions } from './types';
 
+/**
+ * 配下の要素をcallbackで処理する
+ * callbackがfalseを返した場合、処理を中断する
+ * @param target
+ * @param callback
+ * @param options
+ * @returns 処理が最後まで行われた場合にtrue、処理が中断された場合にfalse
+ */
 export default function forEachValues<T extends {}>(
   target: T,
   callback: (value: unknown, key: PropertyKey, obj: T) => void | boolean,

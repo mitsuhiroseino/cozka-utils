@@ -1,6 +1,6 @@
 import kind from '../kind';
 import { KIND_TYPE } from '../kind/constants';
-import { AsValidValueOptions } from './types';
+import { EnsureValidValueOptions } from './types';
 
 /**
  * 型にふさわしい値に変換する
@@ -9,19 +9,19 @@ import { AsValidValueOptions } from './types';
  * @param options オプション
  * @returns
  */
-const asValidValue = <T = unknown>(
+const ensureValidValue = <T = unknown>(
   data: unknown,
-  options?: AsValidValueOptions<T>,
-) => _asValidValue(data, options);
-asValidValue.dataLast =
-  <T = unknown>(options?: AsValidValueOptions<T>) =>
+  options?: EnsureValidValueOptions<T>,
+) => _ensureValidValue(data, options);
+ensureValidValue.dataLast =
+  <T = unknown>(options?: EnsureValidValueOptions<T>) =>
   (data: unknown) =>
-    _asValidValue(data, options);
-export default asValidValue;
+    _ensureValidValue(data, options);
+export default ensureValidValue;
 
-function _asValidValue<T = unknown>(
+function _ensureValidValue<T = unknown>(
   data: unknown,
-  options: AsValidValueOptions<T> = {},
+  options: EnsureValidValueOptions<T> = {},
 ): T {
   if (!options.validType) {
     // 型の指定なし

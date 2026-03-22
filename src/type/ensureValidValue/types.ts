@@ -1,6 +1,6 @@
 import { KindType } from '../kind';
 
-export type AsValidValueOptions<V = unknown> = {
+export type EnsureValidValueOptions<V = unknown> = {
   /**
    * 値として想定している型
    */

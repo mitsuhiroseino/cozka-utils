@@ -81,3 +81,43 @@ type RemedaLazyMany<RESULT> = {
   hasMany: true;
   next: readonly RESULT[];
 };
+
+/**
+ * 値の型を指定可能な汎用レコード型
+ */
+export type FlexibleRecord<V = unknown> = Record<string, V>;
+
+/**
+ * 汎用的なレコード型
+ * 型安全性よりも柔軟性を優先する場合に使用
+ */
+export type LooseRecord = FlexibleRecord<any>;
+
+/**
+ * 型安全な汎用レコード型
+ * 使用時に型ガードが必要な場合に使用
+ */
+export type StrictRecord = FlexibleRecord<unknown>;
+
+/**
+ * 引数と戻り値の型を指定可能な、柔軟な関数定義のベース型
+ * @template P 引数の型（タプルの配列形式、デフォルトは never[]）
+ * @template R 戻り値の型（デフォルトは unknown）
+ */
+export type FlexibleFunction<P extends any[] = never[], R = unknown> = (
+  ...args: P
+) => R;
+
+/**
+ * 型安全性よりも柔軟性を優先した関数型
+ * どんな引数でも受け入れ、戻り値も `any` として自由に扱える
+ * 既存のJavaScriptライブラリとの連携や、型定義を緩くする場合に使用する。
+ */
+export type LooseFunction = FlexibleFunction<any[], any>;
+
+/**
+ * 型安全性を最優先した関数型
+ * 引数を受け取ることができず、戻り値も `unknown` となるため、
+ * 使用する際には適切な型ガードや型アサーションを強制する。
+ */
+export type StrictFunction = FlexibleFunction<never[], unknown>;

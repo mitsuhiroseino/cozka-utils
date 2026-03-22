@@ -1,6 +1,4 @@
-import * as R from 'remeda';
 import {
-  CreateKeyTransformObjectDeleteKeyFn,
   CreateKeyTransformObjectGetKeyFn,
   CreateKeyTransformObjectOptions,
 } from './types';

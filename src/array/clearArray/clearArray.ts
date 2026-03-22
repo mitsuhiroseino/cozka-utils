@@ -1,14 +1,12 @@
 /**
  * 配列の要素を全て削除する。
  * @param data
+ * @returns 削除された全要素
  */
-const clearArray = <T>(data: T[]): T[] => _clearArray(data);
-clearArray.dataLast = () => clearArray;
-export default clearArray;
-
-function _clearArray<T>(data: T[]): T[] {
-  if (data) {
-    data.length = 0;
+export default function clearArray<T>(data: T[]): T[] {
+  if (!Array.isArray(data)) {
+    return [];
   }
-  return data;
+  // 全要素を削除し、削除された要素の配列を返す
+  return data.splice(0);
 }

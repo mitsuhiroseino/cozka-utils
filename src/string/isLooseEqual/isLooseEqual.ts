@@ -13,6 +13,9 @@ export default function isLooseEqual(
   value2: string,
   options: IsLooseEqualOptions = {},
 ): boolean {
+  const { noNormalizationForValue1, noNormalizationForValue2 } = options;
   // 比較
-  return fold(value1, options) === fold(value2, options);
+  const target1 = noNormalizationForValue1 ? value1 : fold(value1, options);
+  const target2 = noNormalizationForValue2 ? value2 : fold(value2, options);
+  return target1 === target2;
 }

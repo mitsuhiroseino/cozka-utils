@@ -1,12 +1,9 @@
-import identity from 'lodash-es/identity';
-import isPlainObject from 'lodash-es/isPlainObject';
-import isString from 'lodash-es/isString';
-import size from 'lodash-es/size';
-import normalizeString from './normalizeString';
+import * as R from 'remeda';
+import fold from '../../string/fold';
+import countKeys from '../countKeys';
+import { FilterByValuesOptions } from './types';
 
-export type FilterValueOptions = {
-  normalize?: boolean;
-};
+const DEFAULT_NORMALIZE_FN = R.identity();
 
 /**
  * 指定の文字列が含まれる値を持つ項目以外をフィルタリングする
@@ -18,14 +15,14 @@ export type FilterValueOptions = {
 export default function filterValue<T = any>(
   target: T,
   condition: unknown,
-  options: FilterValueOptions = {},
+  options: FilterByValuesOptions = {},
 ): T {
   const { normalize } = options;
 
-  let normalizeFn: (value: string) => string = identity;
+  let normalizeFn: (value: string) => string = DEFAULT_NORMALIZE_FN;
   if (condition !== undefined) {
-    if (normalize && isString(condition)) {
-      normalizeFn = normalizeString;
+    if (normalize && R.isString(condition)) {
+      normalizeFn = fold;
       condition = normalizeFn(condition);
     }
   }
@@ -51,7 +48,7 @@ function _filter(
     if (array.length) {
       return array;
     }
-  } else if (isPlainObject(target)) {
+  } else if (R.isPlainObject(target)) {
     // object
     let obj: Record<PropertyKey, unknown> = {};
     for (const key in target) {
@@ -61,12 +58,12 @@ function _filter(
         obj[key] = result;
       }
     }
-    if (size(obj)) {
+    if (countKeys(obj)) {
       return obj;
     }
   } else {
     // valueで比較
-    if (isString(condition) && isString(target)) {
+    if (R.isString(condition) && R.isString(target)) {
       // 文字列の場合
       const normalizedValue = normalizeFn(target);
       if (normalizedValue !== '' && normalizedValue.includes(condition)) {

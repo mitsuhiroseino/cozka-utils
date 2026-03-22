@@ -1,5 +1,7 @@
 import * as R from 'remeda';
 import fold from '../../string/fold';
+import countKeys from '../countKeys';
+import { FilterByKeysOptions } from './types';
 
 const DEFAULT_NORMALIZE_FN = R.identity();
 
@@ -10,10 +12,10 @@ const DEFAULT_NORMALIZE_FN = R.identity();
  * @param options
  * @returns
  */
-export default function filterKey<T = any>(
+export default function filterByKeys<T = any>(
   target: T,
   condition: PropertyKey,
-  options: FilterKeyOptions = {},
+  options: FilterByKeysOptions = {},
 ): T {
   const { normalize } = options;
 
@@ -71,7 +73,7 @@ function _filter(
         }
       }
     }
-    if (Object.keys(obj).length) {
+    if (countKeys(obj)) {
       return obj;
     }
   }

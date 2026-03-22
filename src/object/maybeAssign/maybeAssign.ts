@@ -1,4 +1,4 @@
-import forEachValues from '../../array/forEachValues';
+import forEachValues from '../forEachValues';
 import { MaybeAssignOptions } from './types';
 
 /**

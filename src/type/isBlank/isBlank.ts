@@ -4,6 +4,12 @@ const REGEX_FULL_WHITESPACE = /　/g;
 const REGEX_BOTH_WHITESPACE = /[ 　]/g;
 const REGEX_ALL_WHITESPACE = /\s/g;
 
+/**
+ * 値が空であるか判定する
+ * @param value
+ * @param options
+ * @returns
+ */
 export default function isBlank(
   value: unknown,
   options: IsBlankOptions = {},
