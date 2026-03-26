@@ -2,7 +2,7 @@ import _createContainer from '../../_internal/_createContainer';
 import _parsePath from '../../_internal/_parsePath';
 
 /**
- * オブジェクトを更新して新しいオブジェクトを返します（非破壊的変更）。
+ * オブジェクトを更新して新しいオブジェクトを返す（非破壊的変更）
  * @param data 更新対象のオブジェクト
  * @param path 更新するプロパティのパス（例: 'a.b.0' または ['a', 'b', 0]）
  * @param value 設定する値

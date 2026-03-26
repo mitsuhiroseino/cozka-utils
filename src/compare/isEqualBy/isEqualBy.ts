@@ -41,8 +41,8 @@ const EQUAL_WITH_CUSTOMIZER = {
     value2: unknown,
     options: IsEqualByOptions,
   ) => {
-    const customizer: any = options.customizer,
-      result = customizer(value1, value2);
+    const customizer: any = options.customizer;
+    const result = customizer(value1, value2);
     if (result == null) {
       return value1 === value2;
     } else {
@@ -55,8 +55,8 @@ const EQUAL_WITH_CUSTOMIZER = {
     value2: unknown,
     options: IsEqualByOptions,
   ) => {
-    const customizer: any = options.customizer,
-      result = customizer(value1, value2);
+    const customizer: any = options.customizer;
+    const result = customizer(value1, value2);
     if (result == null) {
       return value1 == value2;
     } else {
